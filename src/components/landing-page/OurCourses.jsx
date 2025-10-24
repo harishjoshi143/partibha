@@ -1,51 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Slider from "react-slick";
 import CourseCard from "../course/CourseCard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { NoteProvider } from "../../context/StateProvider";
 
 const OurCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { courses,loading, error, fetchCourses }=NoteProvider()
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const res = await fetch(
-          "https://pratibhaallpic.onrender.com/api/courses"
-        );
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        // Validate data structure
-        if (Array.isArray(data)) {
-          setCourses(data);
-        } else if (data && Array.isArray(data.data)) {
-          setCourses(data.data);
-        } else {
-          console.warn("Unexpected API response structure:", data);
-          setCourses([]);
-        }
-      } catch (err) {
-        console.error("Course API Error:", err);
-        setError("Failed to load courses. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCourses();
   }, []);
+
+  console.log(courses, "API Response");
+
+
 
   // Slider settings
   const sliderSettings = {
@@ -88,28 +59,7 @@ const OurCourses = () => {
     ],
   };
 
-  // Display courses or fallback data
-  const displayCourses =
-    courses.length > 0
-      ? courses.slice(0, 8)
-      : [
-          {
-            id: 1,
-            title: "Adobe After Effects",
-            description:
-              "Adobe After Effects Is A Powerful Software For Creating Motion Graphics And Visual Effects In Video Production.",
-            price: "4500",
-            duration: "3 Months",
-          },
-          {
-            id: 2,
-            title: "Adobe Photoshop",
-            description:
-              "Learn professional photo editing and digital art creation with Adobe Photoshop.",
-            price: "3500",
-            duration: "2 Months",
-          },
-        ];
+ 
 
   return (
     <div id="Courses" className="pt-14 md:pt-20 xl:pt-24 pb-[78px]">
@@ -144,7 +94,7 @@ const OurCourses = () => {
               {/* Mobile Slider */}
               <div className="block md:hidden w-full">
                 <Slider {...sliderSettings}>
-                  {displayCourses.map((course, index) => (
+                      {courses.map((course, index) => (
                     <div key={course.id || index} className="px-2">
                       <CourseCard mapdata={course} />
                     </div>
@@ -154,7 +104,7 @@ const OurCourses = () => {
 
               {/* Desktop Grid */}
               <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {displayCourses.map((course, index) => (
+                    {courses.map((course, index) => (
                   <div key={course.id || index}>
                     <CourseCard mapdata={course} />
                   </div>

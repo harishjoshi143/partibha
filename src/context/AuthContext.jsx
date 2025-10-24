@@ -5,7 +5,7 @@ const LoginSignUpContext = createContext();
 export const useAuth = () => useContext(LoginSignUpContext);
 
 const AuthProvider = ({ children }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -111,23 +111,17 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // ---------------- LOAD RAZORPAY SDK ----------------
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  // ---------------- HANDLE PAYMENT ----------------
-  const handlePayment = async () => {
+  // handlePayment now takes a course price
+  const handlePayment = async (coursePrice, userName) => {
     try {
+
+
       const response = await fetch(
         "https://razorpay-node-app.onrender.com/create-order",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 10500 }), // ₹10500
+          body: JSON.stringify({ amount: coursePrice }),
         }
       );
 
@@ -146,17 +140,17 @@ const AuthProvider = ({ children }) => {
 
       const options = {
         key: "rzp_live_Cjg9pdloH2HyGV",
-        amount: data.amount,
+        amount: data.amount, // dynamic amount from API
         currency: data.currency,
         name: "Pratibha IT Education",
-        description: "Franchisee Fee Payment",
+        description: "Course Payment",
         order_id: data.id,
         handler: (response) => {
           alert("Payment Successful! ID: " + response.razorpay_payment_id);
           navigate("/application-form/print-preview");
         },
         prefill: {
-          name: "Your Customer Name",
+          name: "userName",
           email: "email@example.com",
           contact: "9999999999",
         },
@@ -175,6 +169,21 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+
+
+  console.log(user)
+
+
+  // ---------------- LOAD RAZORPAY SDK ----------------
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+
+
   return (
     <LoginSignUpContext.Provider
       value={{
@@ -184,7 +193,7 @@ const AuthProvider = ({ children }) => {
         login,
         user,
         partnerLogin,
-        handlePayment,
+        handlePayment
       }}
     >
       {children}

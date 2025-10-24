@@ -10,7 +10,7 @@ const AcademicCourse = () => {
       <div className="custom_container mx-auto px-3 md:px-5 ">
         <SearchInput courseName="OUR ACADEMIC COURSES" />
         <div className="flex flex-col items-center">
-          <div className="flex flex-wrap mt-6 sm:mt-8  ">
+          <div className="flex flex-wrap mt-6 sm:mt-8 w-full ">
             {ourCoursesData.slice(0, 16).map((mapData, index) => (
               <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-2 mt-3">
                 <CourseCard key={index} mapdata={mapData} />

@@ -8,6 +8,7 @@ import { servicesList, stats } from "../components/common/Helper";
 import { BookIcon, HeadPhoneIcon } from "../components/common/Icon";
 import cloudComputer from "../assets/images/png/cloud-computer.png";
 import Marquee from "react-fast-marquee";
+import Courses from "../components/course/Courses";
 
 const Home = () => {
   return (
@@ -61,7 +62,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <OurCourses />
+      {/* <OurCourses /> */}
+      <Courses />
       <div className="bg-[#323232] py-5 ">
         <div className="custom_container mx-auto px-3 md:px-5 text-center">
           <div className={`relative z-10 flex flex-wrap justify-center`}>

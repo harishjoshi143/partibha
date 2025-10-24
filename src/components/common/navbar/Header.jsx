@@ -41,13 +41,6 @@ const Header = () => {
     fetchLogo();
   }, []);
 
-  useEffect(() => {
-    if (logoData) {
-      console.log("logoData updated:", logoData);
-    } else {
-      console.log("api s image nhi a rhe");
-    }
-  }, [logoData]);
 
   const router = useLocation();
   const { showNav, setShowNav } = NoteProvider();

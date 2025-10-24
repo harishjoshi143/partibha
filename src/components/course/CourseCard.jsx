@@ -1,3 +1,6 @@
+
+
+
 import React from "react";
 import { CartIcon, FeesIcon, TimePeriodIcon } from "../common/Icon";
 import { useAuth } from "../../context/AuthContext";
@@ -7,23 +10,24 @@ const CourseCard = ({ mapdata }) => {
 
   let imageUrl = "";
 
+  // ✅ Fixed image URL logic
   if (typeof mapdata?.image === "string") {
-    // Case 1: image is a string
-    imageUrl = mapdata.image.startsWith("https")
+    imageUrl = mapdata.image.startsWith("http")
       ? mapdata.image
       : `https://pratibhaallpic.onrender.com/uploads/${mapdata.image}`;
   } else if (mapdata?.image?.url) {
-    // Case 2: image is an object with url
     imageUrl = mapdata.image.url;
   }
 
+  // console.log(mapdata, "Fetched Courses");
+
   return (
-    <div className="flex flex-col p-3 border border-gray_light rounded-[30px] hover:shadow-backdrop duration-300 hover:border-transparent group ">
+    <div className="flex flex-col p-3 border border-gray_light rounded-[30px] hover:shadow-backdrop duration-300 hover:border-transparent group">
       <div className="flex flex-col h-full">
         {/* Image Section */}
         <div className="flex-shrink-0">
           <div className="w-full aspect-[4/3] overflow-hidden rounded-[30px]">
-            {mapdata.image ? (
+            {imageUrl ? (
               <img
                 src={imageUrl}
                 alt={mapdata.title}
@@ -37,12 +41,12 @@ const CourseCard = ({ mapdata }) => {
           </div>
         </div>
 
-        {/* Content Section - Takes remaining space */}
+        {/* Content Section */}
         <div className="flex flex-col flex-1 mt-2">
           <div>
             {/* Title */}
             <h3 className="font-extrabold text-base text-center text-gray_light uppercase line-clamp-2 min-h-[2.5rem]">
-              {mapdata.title}
+              {mapdata.name}
             </h3>
 
             {/* Description */}
@@ -60,9 +64,10 @@ const CourseCard = ({ mapdata }) => {
                   <FeesIcon />
                 </span>
                 <p className="font-extrabold text-base text-gray_light">
-                  {mapdata.price}
+                  ₹{mapdata.price}
                 </p>
               </div>
+
               <div className="flex items-center gap-1">
                 <span>
                   <TimePeriodIcon />
@@ -73,10 +78,10 @@ const CourseCard = ({ mapdata }) => {
               </div>
             </div>
 
-            {/* Button */}
+            {/* Buy Button */}
             <div className="pt-3">
               <button
-                onClick={() => handlePayment()}
+                onClick={() => handlePayment(mapdata.price)}
                 className="font-normal text-sm text-white leading-6 px-2 py-2 bg-red flex items-center gap-2 capitalize rounded-full border border-transparent hover:border-red hover:text-red hover:bg-transparent group-hover:border-red group-hover:text-red group-hover:bg-transparent duration-300 w-full justify-center text-center group/item"
               >
                 <CartIcon />

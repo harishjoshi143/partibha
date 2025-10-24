@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CourseCard from "../course/CourseCard";
 import SearchInput from "./SearchInput";
+import { NoteProvider } from "../../context/StateProvider";
 
 const ComputerCourse = () => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { courses, loading, fetchCourses }=NoteProvider()
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch(
-          "https://pratibha-logo.onrender.com/api/v1/courses"
-        );
-        const data = await response.json();
-    
-
-        setCourses(data?.data || []);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCourses();
   }, []);
 
@@ -35,7 +19,7 @@ const ComputerCourse = () => {
           <p className="text-center mt-6">Loading courses...</p>
         ) : (
           <div className="flex flex-col items-center">
-            <div className="flex flex-wrap mt-6 sm:mt-8">
+            <div className="flex flex-wrap mt-6 sm:mt-8 w-full">
               {courses?.length > 0 ? (
                 courses?.slice(0, 16).map((mapData, index) => (
                   <div
